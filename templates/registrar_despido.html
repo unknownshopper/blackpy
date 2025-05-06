@@ -1,0 +1,67 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-secondary text-white">
+                <h4 class="mb-0"><i class="fas fa-user-slash me-2"></i>Registrar Despido</h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info mb-4">
+                    <i class="fas fa-info-circle me-2"></i>Registrando despido para: <strong>{{ empleado['nombre'] }} {{ empleado['apellido'] }}</strong>
+                </div>
+                
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="fecha_despido" class="form-label">Fecha de Despido</label>
+                        <input type="date" class="form-control" id="fecha_despido" name="fecha_despido" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="motivo_despido" class="form-label">Motivo de Despido</label>
+                        <select class="form-select mb-2" id="motivo_despido" name="motivo_despido" required>
+                            <option value="">Seleccione un motivo</option>
+                            <option value="Renuncia Voluntaria">Renuncia Voluntaria</option>
+                            <option value="Término de Contrato">Término de Contrato</option>
+                            <option value="Reducción de Personal">Reducción de Personal</option>
+                            <option value="Bajo Rendimiento">Bajo Rendimiento</option>
+                            <option value="Faltas Graves">Faltas Graves</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                        
+                        <div id="otro_motivo_container" style="display: none;">
+                            <label for="otro_motivo" class="form-label">Especifique el motivo</label>
+                            <textarea class="form-control" id="otro_motivo" name="otro_motivo" rows="3"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-secondary">
+                            <i class="fas fa-save me-1"></i>Registrar Despido
+                        </button>
+                        <a href="{{ url_for('listar_empleados') }}" class="btn btn-light">
+                            <i class="fas fa-times me-1"></i>Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const motivoSelect = document.getElementById('motivo_despido');
+        const otroMotivoContainer = document.getElementById('otro_motivo_container');
+        
+        motivoSelect.addEventListener('change', function() {
+            if (this.value === 'Otro') {
+                otroMotivoContainer.style.display = 'block';
+            } else {
+                otroMotivoContainer.style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Tipo de Usuario</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="tipo_usuario" id="admin" value="admin" checked>
+                            <label class="form-check-label" for="admin">
+                                <i class="fas fa-user-shield me-1"></i>Administrador
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="tipo_usuario" id="usuario" value="usuario">
+                            <label class="form-check-label" for="usuario">
+                                <i class="fas fa-user me-1"></i>Usuario Regular
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3" id="password-group">
+                        <label for="password" class="form-label">Contraseña (solo para administradores)</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Ingrese la contraseña">
+                        <div class="form-text">Para este demo, la contraseña de administrador es: admin123</div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Mostrar/ocultar campo de contraseña según el tipo de usuario
+    document.addEventListener('DOMContentLoaded', function() {
+        const adminRadio = document.getElementById('admin');
+        const usuarioRadio = document.getElementById('usuario');
+        const passwordGroup = document.getElementById('password-group');
+        
+        function togglePasswordField() {
+            if (adminRadio.checked) {
+                passwordGroup.style.display = 'block';
+            } else {
+                passwordGroup.style.display = 'none';
+            }
+        }
+        
+        adminRadio.addEventListener('change', togglePasswordField);
+        usuarioRadio.addEventListener('change', togglePasswordField);
+        
+        // Inicializar
+        togglePasswordField();
+    });
+</script>
+{% endblock %}

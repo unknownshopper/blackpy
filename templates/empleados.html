@@ -1,0 +1,114 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0"><i class="fas fa-list me-2"></i>Lista Completa de Empleados</h4>
+    </div>
+    
+    <div class="card-body">
+        <!-- Filtros -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0"><i class="fas fa-filter me-2"></i>Filtros</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="GET" class="row g-3">
+                            <div class="col-md-3">
+                                <label for="departamento" class="form-label">Departamento</label>
+                                <select class="form-select" id="departamento" name="departamento">
+                                    <option value="">Todos</option>
+                                    <!-- Aquí se podrían listar los departamentos disponibles -->
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="cargo" class="form-label">Cargo</label>
+                                <select class="form-select" id="cargo" name="cargo">
+                                    <option value="">Todos</option>
+                                    <!-- Aquí se podrían listar los cargos disponibles -->
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="estado" class="form-label">Estado</label>
+                                <select class="form-select" id="estado" name="estado">
+                                    <option value="">Todos</option>
+                                    <option value="activo">Activos</option>
+                                    <option value="despedido">Despedidos</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fas fa-filter me-1"></i>Aplicar Filtros
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        {% if empleados %}
+            <div class="table-responsive table-container">
+                <table class="table table-striped table-hover">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Cargo</th>
+                            <th>Departamento</th>
+                            <th>Fecha de Ingreso</th>
+                            <th>Fecha de Despido</th>
+                            <th>Motivo de Despido</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for empleado in empleados %}
+                            <tr {% if empleado['fecha_despido'] %}class="table-danger"{% endif %}>
+                                <td>{{ empleado['id'] }}</td>
+                                <td>{{ empleado['nombre'] }}</td>
+                                <td>{{ empleado['apellido'] }}</td>
+                                <td>{{ empleado['cargo'] }}</td>
+                                <td>{{ empleado['departamento'] }}</td>
+                                <td>{{ empleado['fecha_ingreso'] }}</td>
+                                <td>{{ empleado['fecha_despido'] or '-' }}</td>
+                                <td>{{ empleado['motivo_despido'] or '-' }}</td>
+                                <td>
+                                    <a href="{{ url_for('editar_empleado', id=empleado['id']) }}" class="btn btn-sm btn-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    {% if not empleado['fecha_despido'] %}
+                                    <a href="{{ url_for('registrar_despido', id=empleado['id']) }}" class="btn btn-sm btn-secondary">
+                                        <i class="fas fa-user-slash"></i>
+                                    </a>
+                                    {% endif %}
+                                    <a href="{{ url_for('eliminar_empleado', id=empleado['id']) }}" class="btn btn-sm btn-danger" 
+                                       onclick="return confirm('¿Está seguro que desea eliminar este empleado?')">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i>No hay empleados registrados en el sistema.
+            </div>
+        {% endif %}
+    </div>
+    
+    <div class="card-footer">
+        <a href="{{ url_for('agregar_empleado') }}" class="btn btn-success">
+            <i class="fas fa-user-plus me-1"></i>Agregar Nuevo Empleado
+        </a>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary ms-2">
+            <i class="fas fa-arrow-left me-1"></i>Volver al Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}

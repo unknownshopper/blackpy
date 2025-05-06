@@ -1,0 +1,63 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 mb-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <h2 class="card-title">
+                    {% if es_admin %}
+                        <i class="fas fa-user-shield me-2 text-primary"></i>Bienvenido, Administrador
+                    {% else %}
+                        <i class="fas fa-user me-2 text-primary"></i>Bienvenido, Usuario
+                    {% endif %}
+                </h2>
+                <p class="card-text">Sistema de Directorio de Empleados</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    {% if es_admin %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-list fa-4x mb-3 text-primary"></i>
+                    <h5 class="card-title">Ver Lista de Empleados</h5>
+                    <p class="card-text">Accede a la lista completa de empleados registrados en el sistema.</p>
+                    <a href="{{ url_for('listar_empleados') }}" class="btn btn-primary">
+                        <i class="fas fa-list me-1"></i>Ver Lista
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-user-plus fa-4x mb-3 text-success"></i>
+                    <h5 class="card-title">Agregar Nuevo Empleado</h5>
+                    <p class="card-text">Registra un nuevo empleado en el sistema.</p>
+                    <a href="{{ url_for('agregar_empleado') }}" class="btn btn-success">
+                        <i class="fas fa-user-plus me-1"></i>Agregar
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    
+    <div class="col-md-{% if es_admin %}4{% else %}12{% endif %} mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-search fa-4x mb-3 text-info"></i>
+                <h5 class="card-title">Buscar Empleados</h5>
+                <p class="card-text">Busca empleados por nombre, departamento o cargo.</p>
+                <a href="{{ url_for('buscar_empleados') }}" class="btn btn-info text-white">
+                    <i class="fas fa-search me-1"></i>Buscar
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

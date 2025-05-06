@@ -1,0 +1,75 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header bg-info text-white">
+        <h4 class="mb-0"><i class="fas fa-search me-2"></i>Buscar Empleados</h4>
+    </div>
+    <div class="card-body">
+        <form method="POST" class="mb-4">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="criterio" class="form-label">Criterio de búsqueda</label>
+                    <select class="form-select" id="criterio" name="criterio" required>
+                        <option value="nombre" {% if criterio == 'nombre' %}selected{% endif %}>Nombre o Apellido</option>
+                        <option value="departamento" {% if criterio == 'departamento' %}selected{% endif %}>Departamento</option>
+                        <option value="cargo" {% if criterio == 'cargo' %}selected{% endif %}>Cargo</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="valor" class="form-label">Valor a buscar</label>
+                    <input type="text" class="form-control" id="valor" name="valor" value="{{ valor or '' }}" required>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-info text-white w-100">
+                        <i class="fas fa-search me-1"></i>Buscar
+                    </button>
+                </div>
+            </div>
+        </form>
+        
+        {% if resultados is defined %}
+            {% if resultados %}
+                <div class="alert alert-success">
+                    <i class="fas fa-check-circle me-2"></i>Se encontraron {{ resultados|length }} resultados.
+                </div>
+                <div class="table-responsive table-container">
+                    <table class="table table-striped table-hover">
+                        <thead class="table-info">
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Apellido</th>
+                                <th>Cargo</th>
+                                <th>Departamento</th>
+                                <th>Fecha de Ingreso</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for empleado in resultados %}
+                                <tr>
+                                    <td>{{ empleado['id'] }}</td>
+                                    <td>{{ empleado['nombre'] }}</td>
+                                    <td>{{ empleado['apellido'] }}</td>
+                                    <td>{{ empleado['cargo'] }}</td>
+                                    <td>{{ empleado['departamento'] }}</td>
+                                    <td>{{ empleado['fecha_ingreso'] }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>No se encontraron resultados para la búsqueda.
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+    <div class="card-footer">
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-1"></i>Volver al Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}
