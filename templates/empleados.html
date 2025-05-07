@@ -17,25 +17,29 @@
                     <div class="card-body">
                         <form method="GET" class="row g-3">
                             <div class="col-md-3">
-                                <label for="departamento" class="form-label">Departamento</label>
-                                <select class="form-select" id="departamento" name="departamento">
+                                <label for="empresa" class="form-label">Empresa</label>
+                                <select class="form-select" id="empresa" name="empresa">
                                     <option value="">Todos</option>
-                                    <!-- Aquí se podrían listar los departamentos disponibles -->
+                                    {% for empresa in empresas %}
+                                    <option value="{{ empresa }}" {% if empresa == empresa_filtro %}selected{% endif %}>{{ empresa }}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                             <div class="col-md-3">
                                 <label for="cargo" class="form-label">Cargo</label>
                                 <select class="form-select" id="cargo" name="cargo">
                                     <option value="">Todos</option>
-                                    <!-- Aquí se podrían listar los cargos disponibles -->
+                                    {% for cargo in cargos %}
+                                    <option value="{{ cargo }}" {% if cargo == cargo_filtro %}selected{% endif %}>{{ cargo }}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                             <div class="col-md-3">
                                 <label for="estado" class="form-label">Estado</label>
                                 <select class="form-select" id="estado" name="estado">
                                     <option value="">Todos</option>
-                                    <option value="activo">Activos</option>
-                                    <option value="despedido">Despedidos</option>
+                                    <option value="activo" {% if estado_filtro == 'activo' %}selected{% endif %}>Activos</option>
+                                    <option value="despedido" {% if estado_filtro == 'despedido' %}selected{% endif %}>Despedidos</option>
                                 </select>
                             </div>
                             <div class="col-md-3 d-flex align-items-end">
@@ -58,10 +62,11 @@
                             <th>Nombre</th>
                             <th>Apellido</th>
                             <th>Cargo</th>
-                            <th>Departamento</th>
+                            <th>Empresa</th>
                             <th>Fecha de Ingreso</th>
                             <th>Fecha de Despido</th>
                             <th>Motivo de Despido</th>
+                            <th>Demandas Activas</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -72,10 +77,22 @@
                                 <td>{{ empleado['nombre'] }}</td>
                                 <td>{{ empleado['apellido'] }}</td>
                                 <td>{{ empleado['cargo'] }}</td>
-                                <td>{{ empleado['departamento'] }}</td>
+                                <td>{{ empleado['empresa'] }}</td>
                                 <td>{{ empleado['fecha_ingreso'] }}</td>
                                 <td>{{ empleado['fecha_despido'] or '-' }}</td>
                                 <td>{{ empleado['motivo_despido'] or '-' }}</td>
+                                <td>
+                                    {% if empleado.get('tiene_demandas') %}
+                                        {% if empleado.get('numeros_demandas') %}
+                                            {% set demandas_lista = empleado['numeros_demandas'].split(',') %}
+                                            <span class="badge bg-danger">{{ demandas_lista|length }}</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">1</span>
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="badge bg-success">No</span>
+                                    {% endif %}
+                                </td>
                                 <td>
                                     <a href="{{ url_for('editar_empleado', id=empleado['id']) }}" class="btn btn-sm btn-warning">
                                         <i class="fas fa-edit"></i>
@@ -85,6 +102,9 @@
                                         <i class="fas fa-user-slash"></i>
                                     </a>
                                     {% endif %}
+                                    <a href="{{ url_for('exportar_empleado', id=empleado['id']) }}" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-file-excel"></i>
+                                    </a>
                                     <a href="{{ url_for('eliminar_empleado', id=empleado['id']) }}" class="btn btn-sm btn-danger" 
                                        onclick="return confirm('¿Está seguro que desea eliminar este empleado?')">
                                         <i class="fas fa-trash"></i>
@@ -105,6 +125,9 @@
     <div class="card-footer">
         <a href="{{ url_for('agregar_empleado') }}" class="btn btn-success">
             <i class="fas fa-user-plus me-1"></i>Agregar Nuevo Empleado
+        </a>
+        <a href="{{ url_for('exportar_empleados') }}" class="btn btn-primary ms-2">
+            <i class="fas fa-file-excel me-1"></i>Exportar a Excel
         </a>
         <a href="{{ url_for('dashboard') }}" class="btn btn-secondary ms-2">
             <i class="fas fa-arrow-left me-1"></i>Volver al Dashboard

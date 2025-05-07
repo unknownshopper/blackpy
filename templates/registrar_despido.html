@@ -36,6 +36,20 @@
                         </div>
                     </div>
                     
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="tiene_demandas" name="tiene_demandas">
+                            <label class="form-check-label" for="tiene_demandas">
+                                ¿Existen demandas activas?
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3" id="numeros_demandas_container" style="display: none;">
+                        <label for="numeros_demandas" class="form-label">Números de demandas activas</label>
+                        <textarea class="form-control" id="numeros_demandas" name="numeros_demandas" rows="2" placeholder="Ingrese los números de demandas separados por comas (ej: 123/2023, 456/2023)"></textarea>
+                    </div>
+                    
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-secondary">
                             <i class="fas fa-save me-1"></i>Registrar Despido
@@ -60,6 +74,18 @@
                 otroMotivoContainer.style.display = 'block';
             } else {
                 otroMotivoContainer.style.display = 'none';
+            }
+        });
+        
+        // Nuevo código para el campo de demandas
+        const tieneDemandas = document.getElementById('tiene_demandas');
+        const numerosDemandas = document.getElementById('numeros_demandas_container');
+        
+        tieneDemandas.addEventListener('change', function() {
+            if (this.checked) {
+                numerosDemandas.style.display = 'block';
+            } else {
+                numerosDemandas.style.display = 'none';
             }
         });
     });
